@@ -13,7 +13,7 @@ class AgentState(TypedDict):
     lesson_generator_obj: Any # not sure for now
     user_proficiency: str
 
-def call_lesson_planner(state: AgentState):
+def call_lesson_planner(state):
     inputs = {
         "document": state["document"],
         "user_proficiency": state["user_proficiency"],
@@ -22,7 +22,7 @@ def call_lesson_planner(state: AgentState):
     return {
         'lesson_planner_obj': lesson_planner_runnable.invoke(inputs)
     }
-def call_lesson_generator(state: AgentState):
+def call_lesson_generator(state):
     inputs = {
         "document": state["document"],
         "user_proficiency": state["user_proficiency"],

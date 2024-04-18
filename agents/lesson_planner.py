@@ -9,6 +9,8 @@ from langchain.prompts import (
 )
 from langchain_core.pydantic_v1 import BaseModel, Field
 from langchain.output_parsers import PydanticOutputParser
+from langchain_together import Together
+from langchain_groq import ChatGroq
 
 # you can use Internet search tool to find more information. Don't try to make up an answer.
 system_prompt_initial="""You are a teacher with decades of knowledge in effective teaching methods. Your task is to create a lesson based on the contents of the given document that will engage and educate students about the key concepts.
@@ -43,8 +45,6 @@ class LessonStructure(BaseModel):
     Motivation: List[str] = Field(..., title="Why are we learning this? How does this apply to the real world? Why is this important?")
     Summary: str = Field(..., title="Summary of the Lesson")
     Topics: List[str] = Field(..., title="Topics covered in this lesson")
-    # Search : bool = Field(..., title="Internet search tool, Do I have enough information to generate the lesson") 
-    # SearchQuery : str = Field(..., title="Search Query for the internet search tool")
 
 
 parser = PydanticOutputParser(pydantic_object=LessonStructure)
@@ -56,12 +56,20 @@ prompt = ChatPromptTemplate.from_messages(
 
 initialize_env()
 # LLM Which will drive this agent
-llm = ChatOpenAI(
-    api_key=os.environ['OPENAI_API_KEY'], 
-    base_url=os.environ['OPENAI_API_BASE'],
-    model="gpt-4-turbo-2024-04-09",
-    streaming=True,
-    temperature=0.0,
-)
+# llm = ChatOpenAI(
+#     api_key=os.environ['OPENAI_API_KEY'], 
+#     base_url=os.environ['OPENAI_API_BASE'],
+#     model="gpt-4-turbo-2024-04-09",
+#     streaming=True,
+#     temperature=0.0,
+# )
+# llm = Together(
+#     model="cognitivecomputations/dolphin-2.5-mixtral-8x7b",
+#     temperature=0.7,
+#     max_tokens=128,
+#     top_k=1,
+
+# )
+llm = ChatGroq(model_name = "mixtral-8x7b-32768")
 
 lesson_planner_runnable = prompt | llm | parser

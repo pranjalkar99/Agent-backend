@@ -9,26 +9,19 @@ from langchain.prompts import (
 )
 from langchain_together import Together
 from langchain_groq import ChatGroq
+from langchain_core.output_parsers import StrOutputParser
 
-system_prompt_initial="""You are an expert teacher. Your task is to generate a lesson based on the contents of a given document.
-You do not need to generate a lesson plan as it will be handled by a different agent.
+system_prompt_initial="""You are an expert interpreter. You are going to get ocr results from a document and you are expected to parse it properly and make sense of it.
+If it doesnt make any sense, you may skip the part which doesnt make any sense.
+
 Whenever You are invoked you do the following steps silently.
-1. Read the document line by line and understand its contents deeply.
+1. Read the document line by line and try to make the best sense out of it.
 2. Understand each and every concept in the document in detail.
-3. You must not generate quizzes as it will be handled by different agents.
+
 ------------------DOCUMENT--------------------------
 {document}
 -----------------END OF DOCUMENT--------------------
 
-
-
-Given below is a profile of the user and at what level they are expected to understand the lesson:
-User proficiency: {user_proficiency}
-
-
-You are expected to generate a lesson that is easy to understand and follow. The lesson should be Detailed, engaging and should be able to keep the students interested.
-For each of the given topics, you must provide a explaination:
-{topics}
 
 I will tip you $20 if you are perfect, and I will fine you $40 if you miss any important information or change hallucinate up details.
 
@@ -56,8 +49,7 @@ initialize_env()
 #     temperature=0.7,
 #     max_tokens=128,
 #     top_k=1,
-
 # )
 llm = ChatGroq(model_name = "mixtral-8x7b-32768")
 
-lesson_generator_runnable = prompt | llm
+ocr_runnable = prompt | llm | StrOutputParser()
