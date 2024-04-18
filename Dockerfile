@@ -13,6 +13,7 @@ COPY requirements.txt  .
 # Install the dependencies
 RUN pip install  -r requirements.txt
 
+RUN pip install python-multipart
 
 # Copy the rest of the application code into the container
 COPY . .
