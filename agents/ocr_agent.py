@@ -10,7 +10,7 @@ from langchain.prompts import (
 from langchain_together import Together
 from langchain_groq import ChatGroq
 from langchain_core.output_parsers import StrOutputParser
-
+from togetherchain import TogetherLLM
 system_prompt_initial="""You are an expert interpreter. You are going to get ocr results from a document and you are expected to parse it properly and make sense of it.
 If it doesnt make any sense, you may skip the part which doesnt make any sense.
 
@@ -44,12 +44,12 @@ initialize_env()
 #     streaming=True,
 #     temperature=0.0,
 # )
-# llm = Together(
-#     model="cognitivecomputations/dolphin-2.5-mixtral-8x7b",
-#     temperature=0.7,
-#     max_tokens=128,
-#     top_k=1,
-# )
+llm = TogetherLLM(
+    together_api_key="6e5e02a2d3758839cc7e1bae11c6d4ec1f683744d1fbfcc01192336b7f0e8db4",
+    model="meta-llama/Llama-3-8b-chat-hf",
+    temperature=0,
+    max_tokens=3500
+)
 llm = ChatGroq(model_name = "mixtral-8x7b-32768")
 
 ocr_runnable = prompt | llm | StrOutputParser()

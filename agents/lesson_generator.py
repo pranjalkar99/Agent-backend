@@ -2,13 +2,14 @@
 import os
 from typing import List
 from init import initialize_env
-from langchain_openai.chat_models import ChatOpenAI
+# from langchain_openai.chat_models import ChatOpenAI
 from langchain.prompts import (
     ChatPromptTemplate,
     SystemMessagePromptTemplate,
 )
-from langchain_together import Together
+# from langchain_together import Together
 from langchain_groq import ChatGroq
+from togetherchain import TogetherLLM
 
 system_prompt_initial="""You are an expert teacher. Your task is to generate a lesson based on the contents of a given document.
 You do not need to generate a lesson plan as it will be handled by a different agent.
@@ -51,13 +52,12 @@ initialize_env()
 #     streaming=True,
 #     temperature=0.0,
 # )
-# llm = Together(
-#     model="cognitivecomputations/dolphin-2.5-mixtral-8x7b",
-#     temperature=0.7,
-#     max_tokens=128,
-#     top_k=1,
-
-# )
-llm = ChatGroq(model_name = "mixtral-8x7b-32768")
+llm = TogetherLLM(
+    together_api_key="6e5e02a2d3758839cc7e1bae11c6d4ec1f683744d1fbfcc01192336b7f0e8db4",
+    model="meta-llama/Llama-3-8b-chat-hf",
+    temperature=0,
+    max_tokens=3500
+)
+# llm = ChatGroq(model_name = "mixtral-8x7b-32768")
 
 lesson_generator_runnable = prompt | llm

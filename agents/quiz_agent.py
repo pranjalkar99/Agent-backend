@@ -9,6 +9,7 @@ from langchain.prompts import (
 from langchain_core.pydantic_v1 import BaseModel, Field
 from langchain.output_parsers import PydanticOutputParser
 from langchain_groq import ChatGroq
+from togetherchain import TogetherLLM
 
 system_prompt_initial = """You are a quiz generation expert. Your task is to generate a quiz based on the contents of a given document.
 You do not need to generate a lesson plan or lesson as it will be handled by different agents.
@@ -31,7 +32,7 @@ Please use the given format to structure your output:
 -----FORMAT INSTRUCTIONS-----
 {format_instructions}
 -----END OF FORMAT INSTRUCTIONS-----
-
+Its extremely important that you follow the specified format and do not deviate. Do not output any preamble or a response like "Here is the json object:" followed by your json object.
 I will tip you $20 if you create a great quiz, and I will fine you $40 if you include any misleading or incorrect information.
 
 \n\nTake a deep breath, think step by step, analyze the document and generate a quiz:"""
@@ -60,7 +61,12 @@ prompt = ChatPromptTemplate.from_messages(
 
 # Choose the LLM that will drive the agent
 
-
-llm = ChatGroq(model_name = "mixtral-8x7b-32768")
+llm = TogetherLLM(
+    together_api_key="6e5e02a2d3758839cc7e1bae11c6d4ec1f683744d1fbfcc01192336b7f0e8db4",
+    model="mistralai/Mixtral-8x7B-Instruct-v0.1",
+    temperature=0,
+    max_tokens=3500
+)
+# llm = ChatGroq(model_name = "mixtral-8x7b-32768")
 
 quiz_runnable = prompt | llm | parser

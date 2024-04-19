@@ -56,7 +56,7 @@ async def generate_lesson(user_proficiency: str):
     output = lesson_graph.invoke(state_input)
     response = {
         "lesson_planner_obj": output.get('lesson_planner_obj'),
-        "lesson_generator_obj": output.get('lesson_generator_obj').content
+        "lesson_generator_obj": output.get('lesson_generator_obj')
     }
     return response
 
